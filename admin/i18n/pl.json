@@ -1,11 +1,12 @@
 {
-	"Formula 1 Adapter Settings": "Ustawienia adaptera Formuła 1",
-	"Configure update intervals and polling behavior for OpenF1 API.": "Skonfiguruj interwały aktualizacji i zachowanie odpytywania dla API OpenF1.",
-	"Polling Configuration": "Konfiguracja odpytywania",
-	"Enable dynamic polling": "Włącz dynamiczne odpytywanie",
 	"Automatically switch between fast and slow polling based on race schedule": "Automatycznie przełączaj między szybkim a wolnym odpytywaniem na podstawie kalendarza wyścigów",
+	"Configure update intervals and polling behavior for OpenF1 API.": "Skonfiguruj interwały aktualizacji i zachowanie odpytywania dla API OpenF1.",
+	"Enable dynamic polling": "Włącz dynamiczne odpytywanie",
+	"Formula 1 Adapter Settings": "Ustawienia adaptera Formuła 1",
+	"Polling Configuration": "Konfiguracja odpytywania",
 	"Update interval (normal)": "Interwał aktualizacji (normalny)",
-	"Update interval in seconds when no race session is active (default: 1 hour = 3600s)": "Interwał aktualizacji w sekundach bez aktywnej sesji wyścigowej (domyślnie: 1 godzina = 3600 s)",
 	"Update interval (race day)": "Interwał aktualizacji (dzień wyścigu)",
-	"Update interval in seconds during active race sessions (default: 10s). OpenF1 rate limit: 3 req/s, 30 req/min - 10s is safe!": "Interwał w sekundach podczas aktywnych sesji wyścigowych (domyślnie: 10 s). Limit OpenF1: 3 req/s, 30 req/min – 10 s jest bezpieczne!"
+	"Update interval in seconds during active race sessions (default: 10s).": "Interwał w sekundach podczas aktywnych sesji wyścigowych (domyślnie: 10 s).",
+	"Update interval in seconds during active race sessions (default: 10s). OpenF1 rate limit: 3 req/s, 30 req/min - 10s is safe!": "Interwał w sekundach podczas aktywnych sesji wyścigowych (domyślnie: 10 s). Limit OpenF1: 3 req/s, 30 req/min – 10 s jest bezpieczne!",
+	"Update interval in seconds when no race session is active (default: 1 hour = 3600s)": "Interwał aktualizacji w sekundach bez aktywnej sesji wyścigowej (domyślnie: 1 godzina = 3600 s)"
 }

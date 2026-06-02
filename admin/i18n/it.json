@@ -1,11 +1,12 @@
 {
-	"Formula 1 Adapter Settings": "Impostazioni adattatore Formula 1",
-	"Configure update intervals and polling behavior for OpenF1 API.": "Configura gli intervalli di aggiornamento e il comportamento di polling per l'API OpenF1.",
-	"Polling Configuration": "Configurazione polling",
-	"Enable dynamic polling": "Abilita polling dinamico",
 	"Automatically switch between fast and slow polling based on race schedule": "Passa automaticamente tra polling veloce e lento in base al calendario delle gare",
+	"Configure update intervals and polling behavior for OpenF1 API.": "Configura gli intervalli di aggiornamento e il comportamento di polling per l'API OpenF1.",
+	"Enable dynamic polling": "Abilita polling dinamico",
+	"Formula 1 Adapter Settings": "Impostazioni adattatore Formula 1",
+	"Polling Configuration": "Configurazione polling",
 	"Update interval (normal)": "Intervallo di aggiornamento (normale)",
-	"Update interval in seconds when no race session is active (default: 1 hour = 3600s)": "Intervallo di aggiornamento in secondi senza sessione di gara attiva (predefinito: 1 ora = 3600 s)",
 	"Update interval (race day)": "Intervallo di aggiornamento (giorno di gara)",
-	"Update interval in seconds during active race sessions (default: 10s). OpenF1 rate limit: 3 req/s, 30 req/min - 10s is safe!": "Intervallo in secondi durante le sessioni di gara attive (predefinito: 10 s). Limite OpenF1: 3 req/s, 30 req/min – 10 s è sicuro!"
+	"Update interval in seconds during active race sessions (default: 10s).": "Intervallo in secondi durante le sessioni di gara attive (predefinito: 10 s).",
+	"Update interval in seconds during active race sessions (default: 10s). OpenF1 rate limit: 3 req/s, 30 req/min - 10s is safe!": "Intervallo in secondi durante le sessioni di gara attive (predefinito: 10 s). Limite OpenF1: 3 req/s, 30 req/min – 10 s è sicuro!",
+	"Update interval in seconds when no race session is active (default: 1 hour = 3600s)": "Intervallo di aggiornamento in secondi senza sessione di gara attiva (predefinito: 1 ora = 3600 s)"
 }
