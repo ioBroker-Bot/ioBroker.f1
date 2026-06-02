@@ -40,6 +40,7 @@ jobs:
 
     runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
         node-version: ["20", "22", "24"]
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -49,8 +50,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           os: ${{ matrix.os }}
-          # Uncomment the following line if your adapter cannot be installed using 'npm ci'
-          # install-command: 'npm install'
+          install-command: 'npm ci --engine-strict=false'
 
   # TODO: To enable automatic npm releases, create a token on npmjs.org
   # Enter this token as a GitHub secret (with name NPM_TOKEN) in the repository options
