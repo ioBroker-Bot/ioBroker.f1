@@ -50,6 +50,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           os: ${{ matrix.os }}
+          engine-strict: false
           install-command: 'npm ci --engine-strict=false'
           build: true
 
