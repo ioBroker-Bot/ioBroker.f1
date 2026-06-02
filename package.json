@@ -1,6 +1,6 @@
 {
 	"name": "iobroker.f1",
-	"version": "0.1.8",
+	"version": "0.1.9",
 	"description": "Formula 1 live data integration for ioBroker - race information, standings, and live session tracking",
 	"author": {
 		"name": "Martin Rauscher(bloop16)",

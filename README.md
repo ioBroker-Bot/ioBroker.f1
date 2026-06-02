@@ -123,35 +123,18 @@ Data is cached and updated on a schedule. If data appears outdated:
 
 ## Changelog
 
+### 0.1.9 (2026-06-02)
+
+- (bloop) Maintenance: bumped adapter version to `0.1.9`
+- (bloop) Maintenance: updated dependencies and aligned TypeScript with Node 22 baseline
+- (bloop) Admin: completed missing translations for configuration texts
+
 ### 0.1.8 (2026-06-02)
 
 - (bloop) Maintenance: bumped adapter version to `0.1.8`
 - (bloop) Maintenance: aligned ioBroker repository requirements (`Node.js >= 22`, release-script plugins `>= 5.2.0`)
 - (bloop) CI: updated adapter test matrix to include Node.js 20.x
 - (bloop) Docs/Meta: updated README and package metadata for checker compliance
-
-### 0.1.7 (2026-05-03)
-
-- (bloop) Add: post-race refresh retry logic — 6 attempts every 10 minutes to ensure Jolpica round data stabilizes after session end
-- (bloop) Add: `getApiRoundStatus()` monitoring function to independently track results vs standings round consistency
-- (bloop) Fix: points discrepancies during race-end window — verified via cross-API analysis that mixed-round data delivery originates from upstream Jolpica, not adapter mapping
-- (bloop) Enhance: `handleSessionEnded()` now triggers immediate Jolpica refresh followed by 6-attempt retry sequence with detailed logging
-
-### 0.1.6 (2026-05-02)
-
-- (bloop) Remove: `results.fp1`, `results.fp2`, `results.fp3` states — Jolpica/Ergast API does not provide practice session results
-- (bloop) Remove: `results.sprint_qualifying` state — Jolpica/Ergast API does not expose a sprint qualifying endpoint (HTTP 400)
-
-### 0.1.5 (2026-05-02)
-
-- (bloop) Fix: per-session result loading — each session is loaded independently when its scheduled time has passed
-- (bloop) Fix: race result buffer increased to 180 min (was 90 min) to account for race duration + API publishing delay
-- (bloop) Fix: `weekend_json` now shows the currently active race weekend instead of always the next upcoming race
-- (bloop) Fix: `checkLiveStatus` no longer re-fetches the Jolpica schedule API every 60 s — uses cached data from hourly refresh
-- (bloop) Fix: sprint qualifying and practice states are now explicitly set to `null` when the API endpoint is unavailable
-- (bloop) Fix: double-Z bug in date parsing (`new Date("...Z"+"Z")` → Invalid Date) that caused round detection to always return null
-- (bloop) Add: `is_sprint_weekend` flag in `schedule.calendar` JSON entries
-- (bloop) Remove: unused internal `SIGNALR_BASE` constant
 
 For older changelog entries, see [CHANGELOG_OLD.md](CHANGELOG_OLD.md).
 

@@ -11,6 +11,22 @@
 - (bloop) Added API round consistency monitoring for standings/results sync
 - (bloop) Improved post-session refresh flow with detailed retry logging
 
+### 0.1.6 (2026-05-02)
+
+- (bloop) Removed `results.fp1`, `results.fp2`, `results.fp3` states — Jolpica/Ergast API does not provide practice session results
+- (bloop) Removed `results.sprint_qualifying` state — Jolpica/Ergast API does not expose a sprint qualifying endpoint (HTTP 400)
+
+### 0.1.5 (2026-05-02)
+
+- (bloop) Fixed per-session result loading — each session is loaded independently when its scheduled time has passed
+- (bloop) Fixed race result buffer to 180 min (was 90 min) to account for race duration + API publishing delay
+- (bloop) Fixed `weekend_json` to show the currently active race weekend instead of always the next upcoming race
+- (bloop) Fixed `checkLiveStatus` to avoid re-fetching the Jolpica schedule API every 60 s (uses cached hourly data)
+- (bloop) Fixed sprint qualifying and practice states to be explicitly `null` when the API endpoint is unavailable
+- (bloop) Fixed double-Z date parsing bug (`new Date("...Z"+"Z")` -> Invalid Date) which caused round detection to always return null
+- (bloop) Added `is_sprint_weekend` flag in `schedule.calendar` JSON entries
+- (bloop) Removed unused internal `SIGNALR_BASE` constant
+
 ### 0.1.4 (2026-04-15)
 
 - (bloop) Removed VIS1 widgets (development discontinued)

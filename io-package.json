@@ -1,8 +1,21 @@
 {
 	"common": {
 		"name": "f1",
-		"version": "0.1.8",
+		"version": "0.1.9",
 		"news": {
+			"0.1.9": {
+				"en": "Maintenance update: dependency updates, TypeScript/node22 baseline alignment, and completed missing Admin translations.",
+				"de": "Wartungsupdate: Abhängigkeiten aktualisiert, TypeScript/node22-Basis angeglichen und fehlende Admin-Übersetzungen ergänzt.",
+				"ru": "Техническое обновление: обновлены зависимости, выровнена базовая конфигурация TypeScript/node22 и добавлены недостающие переводы Admin.",
+				"pt": "Atualização de manutenção: dependências atualizadas, alinhamento da base TypeScript/node22 e complementação das traduções ausentes no Admin.",
+				"nl": "Onderhoudsupdate: afhankelijkheden bijgewerkt, TypeScript/node22-basis uitgelijnd en ontbrekende Admin-vertalingen aangevuld.",
+				"fr": "Mise à jour de maintenance : dépendances mises à jour, alignement de la base TypeScript/node22 et ajout des traductions Admin manquantes.",
+				"it": "Aggiornamento di manutenzione: dipendenze aggiornate, allineamento della base TypeScript/node22 e completamento delle traduzioni Admin mancanti.",
+				"es": "Actualización de mantenimiento: dependencias actualizadas, alineación de la base TypeScript/node22 y traducciones faltantes del Admin completadas.",
+				"pl": "Aktualizacja utrzymaniowa: zaktualizowano zależności, wyrównano bazę TypeScript/node22 i uzupełniono brakujące tłumaczenia panelu Admin.",
+				"uk": "Технічне оновлення: оновлено залежності, узгоджено базову конфігурацію TypeScript/node22 та додано відсутні переклади Admin.",
+				"zh-cn": "维护更新：已更新依赖项、对齐 TypeScript/node22 基线，并补齐缺失的 Admin 翻译。"
+			},
 			"0.1.8": {
 				"en": "Maintenance release: bumped to 0.1.8 and aligned ioBroker repository requirements (Node.js >=22, release-script >=5.2.0, CI matrix with Node 20, README and metadata cleanup).",
 				"de": "Wartungsrelease: auf 0.1.8 erhöht und ioBroker-Repository-Anforderungen abgeglichen (Node.js >=22, release-script >=5.2.0, CI-Matrix mit Node 20, README- und Metadaten-Bereinigung).",
