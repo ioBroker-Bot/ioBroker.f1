@@ -1,12 +1,11 @@
 {
 	"Automatically switch between fast and slow polling based on race schedule": "根据赛程自动在快速和慢速轮询之间切换",
-	"Configure update intervals and polling behavior for OpenF1 API.": "配置 OpenF1 API 的更新间隔和轮询行为。",
+	"Configure update intervals and polling behavior for schedule, standings and live data updates.": "配置赛程、积分榜和实时数据更新的更新间隔与轮询行为。",
 	"Enable dynamic polling": "启用动态轮询",
 	"Formula 1 Adapter Settings": "一级方程式适配器设置",
 	"Polling Configuration": "轮询配置",
 	"Update interval (normal)": "更新间隔（正常）",
 	"Update interval (race day)": "更新间隔（比赛日）",
 	"Update interval in seconds during active race sessions (default: 10s).": "活跃比赛会话期间的更新间隔（秒）（默认：10秒）。",
-	"Update interval in seconds during active race sessions (default: 10s). OpenF1 rate limit: 3 req/s, 30 req/min - 10s is safe!": "活跃比赛会话期间的更新间隔（秒）（默认：10秒）。OpenF1限制：3次/秒，30次/分 – 10秒是安全的！",
 	"Update interval in seconds when no race session is active (default: 1 hour = 3600s)": "无活跃比赛会话时的更新间隔（秒）（默认：1小时 = 3600秒）"
 }

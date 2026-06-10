@@ -143,7 +143,6 @@ const TRACK_STATUS_MAP: Record<string, string> = {
 
 class F1 extends utils.Adapter {
 	private readonly JOLPICA_BASE = "https://api.jolpi.ca/ergast/f1";
-	private readonly ERGAST_BASE = "https://ergast.com/api/f1";
 
 	// HTTP clients
 	private ergastApi: ReturnType<typeof axios.create>;
@@ -198,6 +197,12 @@ class F1 extends utils.Adapter {
 	private clockExtrapolating = false;
 	private clockInterval?: ioBroker.Interval;
 
+	// Polling config (admin values are in seconds)
+	private dynamicPollingEnabled = true;
+	private normalPollingIntervalMs = 3600 * 1000;
+	private racePollingIntervalMs = 10 * 1000;
+	private currentLiveCheckIntervalMs = 0;
+
 	public constructor(options: Partial<utils.AdapterOptions> = {}) {
 		super({ ...options, name: "f1" });
 
@@ -213,33 +218,128 @@ class F1 extends utils.Adapter {
 		});
 
 		this.on("ready", this.onReady.bind(this));
-		this.on("stateChange", this.onStateChange.bind(this));
 		this.on("unload", this.onUnload.bind(this));
 	}
 
 	private async onReady(): Promise<void> {
 		this.log.info("Starting F1 adapter...");
+		this.dynamicPollingEnabled = this.parseBooleanConfig(this.config.enableDynamicPolling, true);
+		const normalIntervalSeconds = this.getValidatedIntervalSeconds(
+			this.config.updateIntervalNormal,
+			3600,
+			60,
+			86400,
+			"updateIntervalNormal",
+		);
+		const raceIntervalSeconds = this.getValidatedIntervalSeconds(
+			this.config.updateIntervalRace,
+			10,
+			5,
+			300,
+			"updateIntervalRace",
+		);
+		this.normalPollingIntervalMs = normalIntervalSeconds * 1000;
+		this.racePollingIntervalMs = raceIntervalSeconds * 1000;
+
 		await this.initializeStates();
 		await this.setStateAsync("info.connection", { val: false, ack: true });
 
 		// Initial full data load
 		await this.refreshJolpicaData();
 
-		// Hourly Jolpica refresh
-		this.scheduleInterval = this.setInterval(() => void this.refreshJolpicaData(), 60 * 60 * 1000);
+		// Jolpica refresh uses the validated configured normal polling interval.
+		this.scheduleInterval = this.setInterval(() => void this.refreshJolpicaData(), this.normalPollingIntervalMs);
 
-		// Live check every 60 seconds
+		// Live session checks use dynamic or static polling based on adapter config.
 		await this.checkLiveStatus();
-		this.liveCheckInterval = this.setInterval(() => void this.checkLiveStatus(), 60 * 1000);
+		this.updateLiveCheckInterval(new Date(), this.cachedSessions);
 
 		await this.setStateAsync("info.connection", { val: true, ack: true });
 	}
 
-	private onStateChange(id: string, state: ioBroker.State | null | undefined): void {
-		if (!state || state.ack) {
-			return;
+	private parseBooleanConfig(value: unknown, fallback: boolean): boolean {
+		if (typeof value === "boolean") {
+			return value;
 		}
-		this.log.debug(`State change: ${id}`);
+		if (typeof value === "string") {
+			const normalized = value.trim().toLowerCase();
+			if (normalized === "true") {
+				return true;
+			}
+			if (normalized === "false") {
+				return false;
+			}
+		}
+
+		this.log.warn(`Invalid enableDynamicPolling value '${String(value)}'; using fallback ${String(fallback)}.`);
+		return fallback;
+	}
+
+	private getValidatedIntervalSeconds(
+		value: unknown,
+		fallbackSeconds: number,
+		minSeconds: number,
+		maxSeconds: number,
+		configKey: string,
+	): number {
+		const parsed = Number(value);
+
+		if (!Number.isFinite(parsed)) {
+			this.log.warn(
+				`Invalid ${configKey} value '${String(value)}'; using fallback ${fallbackSeconds}s (allowed ${minSeconds}-${maxSeconds}s).`,
+			);
+			return fallbackSeconds;
+		}
+
+		const rounded = Math.trunc(parsed);
+		const bounded = Math.min(maxSeconds, Math.max(minSeconds, rounded));
+		if (bounded !== rounded) {
+			this.log.warn(
+				`Out-of-range ${configKey} value ${rounded}; clamped to ${bounded}s (allowed ${minSeconds}-${maxSeconds}s).`,
+			);
+		}
+
+		return bounded;
+	}
+
+	private setLiveCheckInterval(intervalMs: number): void {
+		if (this.liveCheckInterval) {
+			this.clearInterval(this.liveCheckInterval);
+		}
+		this.liveCheckInterval = this.setInterval(() => void this.checkLiveStatus(), intervalMs);
+		this.currentLiveCheckIntervalMs = intervalMs;
+	}
+
+	private shouldUseFastPolling(now: Date, sessions: ScheduleSession[]): boolean {
+		if (this.currentLiveSession) {
+			return true;
+		}
+
+		const nowMs = now.getTime();
+		const FAST_PRE_MS = 60 * 60 * 1000;
+		const FAST_POST_MS = 15 * 60 * 1000;
+
+		for (const session of sessions) {
+			const startMs = new Date(session.startUTC).getTime() - FAST_PRE_MS;
+			const endMs = new Date(session.endUTC).getTime() + FAST_POST_MS;
+			if (nowMs >= startMs && nowMs <= endMs) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private updateLiveCheckInterval(now: Date, sessions: ScheduleSession[]): void {
+		const targetMs = this.dynamicPollingEnabled
+			? this.shouldUseFastPolling(now, sessions)
+				? this.racePollingIntervalMs
+				: this.normalPollingIntervalMs
+			: this.normalPollingIntervalMs;
+
+		if (!this.liveCheckInterval || this.currentLiveCheckIntervalMs !== targetMs) {
+			this.setLiveCheckInterval(targetMs);
+		}
 	}
 
 	private onUnload(callback: () => void): void {
@@ -373,16 +473,16 @@ class F1 extends utils.Adapter {
 		}
 	}
 
-	// ── Jolpica / Ergast data ─────────────────────────────────────────────────
+	// ── Jolpica data ──────────────────────────────────────────────────────────
 
 	/**
-	 * Fetch from Jolpica with automatic fallback to ergast.com.
-	 * Returns null (instead of throwing) on 404 — endpoint not found on both hosts.
+	 * Fetch from Jolpica.
+	 * Returns null (instead of throwing) on not-available endpoints.
 	 *
 	 * @param path - API path, e.g. "/current/last/results.json"
 	 */
 	private async fetchErgast(path: string): Promise<any> {
-		// Helper to detect "not found" errors so we don't waste the fallback on them
+		// Helper to detect unavailable endpoints and map them to null.
 		// 400 = Jolpica "Endpoint does not support final filter" → treat as not-available
 		const isNotFound = (e: unknown): boolean => {
 			const status = (e as any)?.response?.status as number | undefined;
@@ -394,21 +494,10 @@ class F1 extends utils.Adapter {
 			return res.data;
 		} catch (jolpicaErr) {
 			if (isNotFound(jolpicaErr)) {
-				this.log.debug(`Jolpica not-available for: ${path} — skipping fallback`);
+				this.log.debug(`Jolpica not-available for: ${path}`);
 				return null;
 			}
-			// Network error / 5xx → try ergast.com
-			this.log.debug(`Jolpica unavailable, falling back to ergast.com for: ${path}`);
-			try {
-				const res = await this.ergastApi.get<any>(`${this.ERGAST_BASE}${path}`);
-				return res.data;
-			} catch (ergastErr) {
-				if (isNotFound(ergastErr)) {
-					this.log.debug(`Ergast 404 for: ${path}`);
-					return null;
-				}
-				throw ergastErr;
-			}
+			throw jolpicaErr;
 		}
 	}
 
@@ -887,6 +976,8 @@ class F1 extends utils.Adapter {
 					}
 				}
 			}
+
+			this.updateLiveCheckInterval(now, allSessions);
 		} catch (error) {
 			const msg = error instanceof Error ? error.message : String(error);
 			this.log.warn(`Live check failed: ${msg}`);

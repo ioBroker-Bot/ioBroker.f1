@@ -1,12 +1,11 @@
 {
 	"Automatically switch between fast and slow polling based on race schedule": "Автоматично перемикатися між швидким і повільним опитуванням залежно від розкладу перегонів",
-	"Configure update intervals and polling behavior for OpenF1 API.": "Налаштуйте інтервали оновлення та поведінку опитування для API OpenF1.",
+	"Configure update intervals and polling behavior for schedule, standings and live data updates.": "Налаштуйте інтервали оновлення та поведінку опитування для оновлень розкладу, турнірних таблиць і live-даних.",
 	"Enable dynamic polling": "Увімкнути динамічне опитування",
 	"Formula 1 Adapter Settings": "Налаштування адаптера Формула 1",
 	"Polling Configuration": "Конфігурація опитування",
 	"Update interval (normal)": "Інтервал оновлення (звичайний)",
 	"Update interval (race day)": "Інтервал оновлення (день перегонів)",
 	"Update interval in seconds during active race sessions (default: 10s).": "Інтервал у секундах під час активних гоночних сесій (за замовчуванням: 10 с).",
-	"Update interval in seconds during active race sessions (default: 10s). OpenF1 rate limit: 3 req/s, 30 req/min - 10s is safe!": "Інтервал у секундах під час активних гоночних сесій (за замовчуванням: 10 с). Ліміт OpenF1: 3 запр./с, 30 запр./хв – 10 с безпечно!",
 	"Update interval in seconds when no race session is active (default: 1 hour = 3600s)": "Інтервал оновлення в секундах без активної гоночної сесії (за замовчуванням: 1 година = 3600 с)"
 }

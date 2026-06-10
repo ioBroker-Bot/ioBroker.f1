@@ -1,12 +1,11 @@
 {
 	"Automatically switch between fast and slow polling based on race schedule": "Alternar automaticamente entre sondagem rápida e lenta com base no calendário de corridas",
-	"Configure update intervals and polling behavior for OpenF1 API.": "Configurar intervalos de atualização e comportamento de sondagem para a API OpenF1.",
+	"Configure update intervals and polling behavior for schedule, standings and live data updates.": "Configurar intervalos de atualização e comportamento de sondagem para atualizações de calendário, classificações e dados ao vivo.",
 	"Enable dynamic polling": "Ativar sondagem dinâmica",
 	"Formula 1 Adapter Settings": "Configurações do adaptador Fórmula 1",
 	"Polling Configuration": "Configuração de sondagem",
 	"Update interval (normal)": "Intervalo de atualização (normal)",
 	"Update interval (race day)": "Intervalo de atualização (dia de corrida)",
 	"Update interval in seconds during active race sessions (default: 10s).": "Intervalo em segundos durante sessões de corrida ativas (padrão: 10 s).",
-	"Update interval in seconds during active race sessions (default: 10s). OpenF1 rate limit: 3 req/s, 30 req/min - 10s is safe!": "Intervalo em segundos durante sessões de corrida ativas (padrão: 10 s). Limite OpenF1: 3 req/s, 30 req/min – 10 s é seguro!",
 	"Update interval in seconds when no race session is active (default: 1 hour = 3600s)": "Intervalo de atualização em segundos sem sessão de corrida ativa (padrão: 1 hora = 3600 s)"
 }
