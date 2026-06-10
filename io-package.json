@@ -1,8 +1,21 @@
 {
 	"common": {
 		"name": "f1",
-		"version": "0.1.10",
+		"version": "0.1.11",
 		"news": {
+			"0.1.11": {
+				"en": "Live data quality update: fixed truncated race control/team radio outputs, improved top-three ordering and tyre/driver cache merging, and aligned session-end handling for more consistent Monaco race data.",
+				"de": "Live-Daten-Qualitätsupdate: gekürzte Race-Control/Team-Radio-Ausgaben behoben, Top-3-Reihenfolge sowie Tyre-/Driver-Cache-Merging verbessert und Session-Ende-Handling für konsistentere Monaco-Renndaten vereinheitlicht.",
+				"ru": "Обновление качества live-данных: исправлено обрезание race control/team radio, улучшены порядок top-3 и объединение кэша шин/пилотов, а также унифицирована обработка завершения сессии для более консистентных данных гонки в Монако.",
+				"pt": "Atualização de qualidade dos dados ao vivo: corrigido truncamento de race control/team radio, melhorada a ordenação do top 3 e a mesclagem de cache de pneus/pilotos, e alinhado o tratamento de fim de sessão para dados mais consistentes da corrida de Mônaco.",
+				"nl": "Live-datakwaliteitsupdate: afgeknotte race control/team radio-uitvoer opgelost, top-3-volgorde en banden-/rijderscache-merge verbeterd en sessie-einde-afhandeling uitgelijnd voor consistentere Monaco-racedata.",
+				"fr": "Mise à jour qualité des données live : correction de la troncature race control/team radio, amélioration de l'ordre du top 3 et de la fusion du cache pneus/pilotes, et harmonisation de la gestion de fin de session pour des données de Monaco plus cohérentes.",
+				"it": "Aggiornamento qualità dati live: corretto il troncamento di race control/team radio, migliorati ordinamento top 3 e merge cache pneumatici/piloti, e allineata la gestione di fine sessione per dati del GP di Monaco più coerenti.",
+				"es": "Actualización de calidad de datos en vivo: corregido el truncado de race control/team radio, mejorado el orden del top 3 y la fusión de caché de neumáticos/pilotos, y alineado el manejo de fin de sesión para datos más consistentes de Mónaco.",
+				"pl": "Aktualizacja jakości danych live: naprawiono ucinanie race control/team radio, poprawiono kolejność top 3 oraz scalanie cache opon/kierowców i ujednolicono obsługę końca sesji dla bardziej spójnych danych z Monako.",
+				"uk": "Оновлення якості live-даних: виправлено обрізання race control/team radio, покращено порядок top-3 і злиття кешу шин/пілотів, а також уніфіковано обробку завершення сесії для більш узгоджених даних гонки в Монако.",
+				"zh-cn": "实时数据质量更新：修复了 race control/team radio 输出被截断的问题，优化了前三名排序与轮胎/车手缓存合并，并统一了会话结束处理，使摩纳哥比赛数据更一致。"
+			},
 			"0.1.10": {
 				"en": "Live timing fix: migrated live sessions from legacy SignalR endpoint to SignalR Core, reducing 401 reconnect warnings and improving live feed stability.",
 				"de": "Live-Timing-Fix: Live-Sessions vom alten SignalR-Endpunkt auf SignalR Core migriert, dadurch weniger 401-Reconnect-Warnungen und stabilerer Live-Feed.",

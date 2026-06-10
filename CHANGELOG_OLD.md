@@ -4,6 +4,12 @@
     Older changelog entries are stored here.
     This file is supported by @alcalzone/releasescript.
 -->
+### 0.1.9 (2026-06-02)
+
+- (bloop) Maintenance: bumped adapter version to `0.1.9`
+- (bloop) Maintenance: updated dependencies and aligned TypeScript with Node 22 baseline
+- (bloop) Admin: completed missing translations for configuration texts
+
 ### 0.1.8 (2026-06-02)
 
 - (bloop) Maintenance: bumped adapter version to `0.1.8`

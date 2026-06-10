@@ -123,17 +123,18 @@ Data is cached and updated on a schedule. If data appears outdated:
 
 ## Changelog
 
+### 0.1.11 (2026-06-10)
+
+- (bloop) Live data quality: fixed truncated outputs for `live.race_control` and `live.team_radio`
+- (bloop) Live ranking quality: corrected top-three ordering by position
+- (bloop) Live cache consistency: improved tyre and driver merge logic for partial incremental updates
+- (bloop) Session-end flow: unified handling path to avoid inconsistent post-session states
+
 ### 0.1.10 (2026-06-05)
 
 - (bloop) Fixed live sessions by migrating from legacy SignalR to SignalR Core transport
 - (bloop) Reduced repeated 401 reconnect warnings from F1 Live Timing legacy endpoint
 - (bloop) Improved live connection stability with handshake-aware subscription flow
-
-### 0.1.9 (2026-06-02)
-
-- (bloop) Maintenance: bumped adapter version to `0.1.9`
-- (bloop) Maintenance: updated dependencies and aligned TypeScript with Node 22 baseline
-- (bloop) Admin: completed missing translations for configuration texts
 
 For older changelog entries, see [CHANGELOG_OLD.md](CHANGELOG_OLD.md).
 
