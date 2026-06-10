@@ -139,6 +139,9 @@ const TRACK_STATUS_MAP: Record<string, string> = {
 	8: "SafetyCarEnding",
 };
 
+const LIVE_RACE_CONTROL_MAX = 200;
+const LIVE_TEAM_RADIO_MAX = 100;
+
 // ── Adapter class ─────────────────────────────────────────────────────────────
 
 class F1 extends utils.Adapter {
@@ -709,12 +712,12 @@ class F1 extends utils.Adapter {
 		return ["ends", "ended", "finished", "finalised", "finalized", "inactive", "completed"].includes(normalized);
 	}
 
-	private async handleSessionEnded(reason: string): Promise<void> {
-		if (!this.currentLiveSession) {
+	private async handleSessionEnded(reason: string, endedSessionOverride?: ScheduleSession | null): Promise<void> {
+		const endedSession = this.currentLiveSession ?? endedSessionOverride ?? null;
+		if (!endedSession) {
 			return;
 		}
 
-		const endedSession = this.currentLiveSession;
 		this.currentLiveSession = null;
 		this.liveFallbackActive = false;
 		// Prevent immediate OpenF1 fallback re-entry after session end.
@@ -953,26 +956,15 @@ class F1 extends utils.Adapter {
 				}
 			} else {
 				this.liveFallbackActive = false;
-				await this.setStateAsync("live.is_live", { val: false, ack: true });
-				await this.setStateAsync("live.session_part", { val: 0, ack: true });
-				await this.setStateAsync("live.time_elapsed", { val: "00:00:00", ack: true });
-				this.stopClockExtrapolation();
-				if (this.ws) {
-					this.disconnectSignalR(true); // full reset: session ended, wipe driver metadata
-				}
-
-				// Session just ended → refresh results & standings
 				if (prevSession) {
-					const savedKey = `${prevSession.round}-${prevSession.type}`;
-					if (savedKey !== this.lastSavedSession) {
-						this.lastSavedSession = savedKey;
-						this.log.info(
-							`Session ended: ${prevSession.name} (round ${prevSession.round}). Refreshing results...`,
-						);
-						void this.updateLatestResults(races);
-						if (prevSession.type === "Race") {
-							void this.updateStandings();
-						}
+					await this.handleSessionEnded("schedule window ended", prevSession);
+				} else {
+					await this.setStateAsync("live.is_live", { val: false, ack: true });
+					await this.setStateAsync("live.session_part", { val: 0, ack: true });
+					await this.setStateAsync("live.time_elapsed", { val: "00:00:00", ack: true });
+					this.stopClockExtrapolation();
+					if (this.ws) {
+						this.disconnectSignalR(true); // full reset: session ended, wipe driver metadata
 					}
 				}
 			}
@@ -1512,11 +1504,11 @@ class F1 extends utils.Adapter {
 			return;
 		}
 		this.rcMessages.push(...incoming);
-		if (this.rcMessages.length > 50) {
-			this.rcMessages = this.rcMessages.slice(-50);
+		if (this.rcMessages.length > LIVE_RACE_CONTROL_MAX) {
+			this.rcMessages = this.rcMessages.slice(-LIVE_RACE_CONTROL_MAX);
 		}
 		await this.setStateAsync("live.race_control", {
-			val: JSON.stringify(this.rcMessages.slice(-20), null, 2),
+			val: JSON.stringify(this.rcMessages, null, 2),
 			ack: true,
 		});
 	}
@@ -1538,7 +1530,11 @@ class F1 extends utils.Adapter {
 			// Incremental update: merge into cache so partial updates don't wipe existing entries
 			this.topThreeData = this.deepMerge(this.topThreeData, data.Lines as Record<string, any>);
 		}
-		const entries = Object.values(this.topThreeData);
+		const entries = Object.values(this.topThreeData).sort((a: any, b: any) => {
+			const posA = parseInt(String(a?.Position ?? 99), 10);
+			const posB = parseInt(String(b?.Position ?? 99), 10);
+			return posA - posB;
+		});
 		if (entries.length === 0) {
 			return;
 		}
@@ -1558,11 +1554,11 @@ class F1 extends utils.Adapter {
 			return;
 		}
 		this.teamRadioCaptures.push(...incoming);
-		if (this.teamRadioCaptures.length > 50) {
-			this.teamRadioCaptures = this.teamRadioCaptures.slice(-50);
+		if (this.teamRadioCaptures.length > LIVE_TEAM_RADIO_MAX) {
+			this.teamRadioCaptures = this.teamRadioCaptures.slice(-LIVE_TEAM_RADIO_MAX);
 		}
 		await this.setStateAsync("live.team_radio", {
-			val: JSON.stringify(this.teamRadioCaptures.slice(-10), null, 2),
+			val: JSON.stringify(this.teamRadioCaptures, null, 2),
 			ack: true,
 		});
 	}
@@ -1641,7 +1637,9 @@ class F1 extends utils.Adapter {
 			}
 			// Merge into tyreStintData so incremental updates (e.g. only TotalLaps) don't wipe Compound/New
 			this.tyreStintData[num] = { ...(this.tyreStintData[num] ?? {}), ...current };
-			const merged = this.tyreStintData[num];
+		}
+
+		for (const [num, merged] of Object.entries(this.tyreStintData)) {
 			tyres.push({
 				racing_number: num,
 				compound: merged.Compound ?? "",
@@ -1660,7 +1658,14 @@ class F1 extends utils.Adapter {
 	 */
 	private async publishDrivers(): Promise<void> {
 		const drivers: any[] = [];
-		for (const [num, info] of Object.entries(this.driverList)) {
+		const keys = new Set<string>([
+			...Object.keys(this.driverList),
+			...Object.keys(this.timingData),
+			...Object.keys(this.timingAppData),
+			...Object.keys(this.tyreStintData),
+		]);
+		for (const num of keys) {
+			const info = this.driverList[num] ?? {};
 			if (!info || typeof info !== "object") {
 				continue;
 			}
