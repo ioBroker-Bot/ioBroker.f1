@@ -137,6 +137,8 @@ Data is cached and updated on a schedule. If data appears outdated:
 
 For older changelog entries, see [CHANGELOG_OLD.md](CHANGELOG_OLD.md).
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## Data Sources & Attribution
 
 This adapter relies on the following data sources:
