@@ -122,6 +122,10 @@ Data is cached and updated on a schedule. If data appears outdated:
 
 ## Changelog
 
+
+### **WORK IN PROGRESS**
+- (ioBroker-Bot) Adapter requires admin >= 7.8.23 now.
+
 ### 0.1.11 (2026-06-10)
 
 - (bloop) Live data quality: fixed truncated outputs for `live.race_control` and `live.team_radio`
