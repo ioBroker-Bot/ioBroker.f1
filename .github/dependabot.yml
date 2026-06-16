@@ -1,32 +1,37 @@
+# Dependabot will run on day 13 of each month at 01:18 (Europe/Berlin timezone)
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directories: ["**/*"]
+
+  - package-ecosystem: 'npm'
+    directories:
+      - '**/*'
     schedule:
-      interval: "daily"
-      time: "04:17"
-      timezone: "UTC"
-    open-pull-requests-limit: 10
-    rebase-strategy: "auto"
+      interval: 'daily'
+      time: '04:17'
+      timezone: 'Europe/Berlin'
+    open-pull-requests-limit: 15
+    rebase-strategy: 'auto'
     cooldown:
       default-days: 7
     ignore:
-      # Ignore major version updates to avoid breaking changes
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "@types/node"
-        update-types: ["version-update:semver-major"]
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
+      - dependency-name: '@types/node'
+        update-types:
+          - 'version-update:semver-major'
     labels:
-      - "dependencies"
-      - "automerge"
-  - package-ecosystem: "github-actions"
-    directory: "/"
+      - 'dependencies'
+      - 'automerge'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "daily"
-      time: "03:00"
-      timezone: "UTC"
+      interval: 'daily'
+      time: '03:00'
+      timezone: 'Europe/Berlin'
     open-pull-requests-limit: 15
-    rebase-strategy: "auto"
+    rebase-strategy: 'auto'
     labels:
-      - "dependencies"
-      - "automerge"
+      - 'dependencies'
+      - 'automerge'
